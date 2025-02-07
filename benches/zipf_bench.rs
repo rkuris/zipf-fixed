@@ -3,24 +3,31 @@
 use rand::distr::Distribution;
 extern crate test;
 
-use rand_distr::Zipf as Theirs;
 use rand::Rng;
+use rand_distr::Zipf as Theirs;
 
 use test::Bencher;
 
-use zipf::Zipf;
+use zipf_fixed::{ZipfFast, ZipfFixed};
 
 #[bench]
-fn bench_ours(b: &mut Bencher) {
+fn bench_fixed(b: &mut Bencher) {
     let mut rng = rand::rng();
-    let d = Zipf::<10>::new(0.5);
+    let d = ZipfFixed::<100>::new(1.2);
+    b.iter(|| d.sample(&mut rng));
+}
+
+#[bench]
+fn bench_fast(b: &mut Bencher) {
+    let mut rng = rand::rng();
+    let d = ZipfFast::new(1.2, 1.0, 100).unwrap();
     b.iter(|| d.sample(&mut rng));
 }
 
 #[bench]
 fn bench_theirs(b: &mut Bencher) {
     let mut rng = rand::rng();
-    let d = Theirs::new(10., 0.5).unwrap();
+    let d = Theirs::new(100., 1.2).unwrap();
     b.iter(|| d.sample(&mut rng));
 }
 
