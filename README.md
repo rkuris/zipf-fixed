@@ -2,13 +2,17 @@
 
 Zipf-fixed is an optimized implementation of the [zipf distribution](https://en.wikipedia.org/wiki/Zipf%27s_law) that is compute-heavy
 up front in order to perform better each time a sample is retrieved.
-It is about 10x faster than rand_distr::Zipf to compute the next number.
+It is about 10x faster than rand\_distr::Zipf to compute the next number.
 The cost for these gains is a longer setup time to create the distribution.
 
+Also, an algorithm that is faster is also provided that doesn't precompute
+or use a lot more memory, ZipfFast.
+
 ```text
-     test bench_ours   ... bench:          21.83 ns/iter (+/- 1.20)
-     test bench_theirs ... bench:         183.02 ns/iter (+/- 7.17)
-     test bench_rand   ... bench:           9.21 ns/iter (+/- 0.32)
+    test bench_fast   ... bench:          27.07 ns/iter (+/- 4.55)
+    test bench_fixed  ... bench:          26.20 ns/iter (+/- 0.34)
+    test bench_rand   ... bench:           9.43 ns/iter (+/- 0.12)
+    test bench_theirs ... bench:         153.59 ns/iter (+/- 8.91)
 ```
 
 The benchmark `bench_theirs` uses `rand_distr::Zipf`.
